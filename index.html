@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NdrewFitness — Premium Online Coaching</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent:   '#0077FF',
+            'accent-dim': '#005FCC',
+            base:     '#0B0B0B',
+            surface:  '#141414',
+            elevated: '#1C1C1C',
+            border:   'rgba(255,255,255,0.08)',
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'sans-serif'],
+            body:    ['Montserrat', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #0B0B0B;
+      color: #F0EDE8;
+      font-family: 'Montserrat', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── TYPOGRAPHY ─────────────────────────────── */
+    h1, h2, h3, h4, h5 { font-family: 'Montserrat', sans-serif; }
+
+    /* ── BUTTONS ────────────────────────────────── */
+    .btn-primary {
+      background: #0077FF;
+      color: #0B0B0B;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: inline-block;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    .btn-primary:hover  { background: #005FCC; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:focus-visible { outline: 2px solid #0077FF; outline-offset: 3px; }
+
+    .btn-ghost {
+      border: 1px solid rgba(0,119,255,0.45);
+      color: #0077FF;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: inline-block;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+    }
+    .btn-ghost:hover  { border-color: #0077FF; background: rgba(0,119,255,0.08); transform: translateY(-1px); }
+    .btn-ghost:active { transform: translateY(0); }
+    .btn-ghost:focus-visible { outline: 2px solid #0077FF; outline-offset: 3px; }
+
+    /* ── ACCENT LINE ────────────────────────────── */
+    .accent-rule { width: 36px; height: 1px; background: #0077FF; }
+
+    /* ── NAV LINKS ──────────────────────────────── */
+    .nav-link {
+      position: relative;
+      color: rgba(240,237,232,0.5);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+      text-decoration: none;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: #0077FF;
+      transition: width 0.25s ease;
+    }
+    .nav-link:hover { color: #F0EDE8; }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ── ACCORDION ──────────────────────────────── */
+    .acc-content { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1); }
+    .acc-item.open .acc-content { max-height: 300px; }
+    .acc-item.open .acc-arrow { transform: rotate(180deg); }
+    .acc-arrow { transition: transform 0.3s ease; display: inline-block; }
+    .acc-item button { color: #F0EDE8 !important; background: transparent; }
+
+    /* ── CARDS ──────────────────────────────────── */
+    .coach-card { transition: transform 0.25s ease; }
+    .coach-card:hover { transform: translateY(-3px); }
+
+    /* ── RECEIVE CARDS ──────────────────────────── */
+    .receive-card { transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s ease; }
+    .receive-card:hover { transform: translateY(-4px); border-color: rgba(0,119,255,0.35); }
+    .receive-glow {
+      position: absolute; inset: 0; opacity: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0,119,255,0.12), transparent);
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .receive-card:hover .receive-glow { opacity: 1; }
+    .receive-icon {
+      width: 44px; height: 44px;
+      border: 1px solid rgba(0,119,255,0.25);
+      display: flex; align-items: center; justify-center: center;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .receive-card:hover .receive-icon { border-color: rgba(0,119,255,0.6); background: rgba(0,119,255,0.08); }
+    .receive-icon { display: flex; align-items: center; justify-content: center; }
+
+    .ba-card { position: relative; }
+    .ba-card img { transition: transform 0.45s ease; }
+    .ba-card:hover img { transform: scale(1.03); }
+
+    /* ── INPUTS ─────────────────────────────────── */
+    input, select, textarea {
+      background: #1C1C1C;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #F0EDE8;
+      font-family: 'Montserrat', sans-serif;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    input:focus, select:focus, textarea:focus { border-color: rgba(0,119,255,0.6); }
+    input::placeholder, textarea::placeholder { color: rgba(240,237,232,0.3); }
+    select option { background: #1C1C1C; }
+
+    /* ── HERO ───────────────────────────────────── */
+    .hero-bg {
+      background: #0B0B0B;
+      background-image:
+        radial-gradient(ellipse 90% 100% at 85% 50%, rgba(0,119,255,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 35% 50% at 10% 20%, rgba(0,119,255,0.03) 0%, transparent 60%);
+    }
+
+    /* ── NOISE TEXTURE ──────────────────────────── */
+    .noise::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── CHECK ITEMS ────────────────────────────── */
+    .check-item { display: flex; align-items: flex-start; gap: 12px; }
+    .check-icon {
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      margin-top: 1px;
+      border: 1px solid rgba(0,119,255,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; color: #0077FF; font-weight: 700;
+    }
+
+    /* ── STEP NUMBER ────────────────────────────── */
+    .step-num {
+      flex-shrink: 0;
+      width: 38px; height: 38px;
+      border: 1px solid rgba(0,119,255,0.35);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: #0077FF;
+    }
+
+    /* ── SOCIAL ICONS ───────────────────────────── */
+    .social-btn {
+      width: 34px; height: 34px;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(240,237,232,0.4);
+      font-size: 0.7rem; font-weight: 600;
+      transition: border-color 0.2s ease, color 0.2s ease;
+      text-decoration: none;
+    }
+    .social-btn:hover { border-color: rgba(0,119,255,0.5); color: #0077FF; }
+
+    /* ── PRICING CARD ───────────────────────────── */
+    .plan-card { transition: border-color 0.2s ease; }
+    .plan-card:hover { border-color: rgba(0,119,255,0.3); }
+  </style>
+</head>
+<body>
+
+
+<!-- ═══════════════════════════════════════════
+     ANNOUNCEMENT BANNER
+═══════════════════════════════════════════ -->
+<div style="background: #0077FF;" class="py-2.5 px-4 text-center">
+  <p class="text-[#0B0B0B] text-[10px] font-semibold tracking-[0.22em] uppercase">
+    Limited spots available. Secure your place now.
+  </p>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════ -->
+<nav class="sticky top-0 z-50 bg-[#0B0B0B]/96 backdrop-blur-sm border-b border-white/[0.07]">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-3">
+      <span class="font-heading text-[1.1rem] font-bold tracking-[0.1em] text-[#F0EDE8]">NDREW<span style="color:#0077FF;">FITNESS</span></span>
+    </a>
+    <!-- Links -->
+    <div class="hidden lg:flex items-center gap-8">
+      <a href="#about"    class="nav-link">About</a>
+      <a href="#coaches"  class="nav-link">Coach</a>
+      <a href="#programs" class="nav-link">Programs</a>
+      <a href="#results"  class="nav-link">Results</a>
+      <a href="#faq"      class="nav-link">FAQ</a>
+    </div>
+    <!-- CTA -->
+    <a href="https://tally.so/r/NpLxl0" class="btn-primary px-6 py-2.5 text-[10px]">Apply Now</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section id="about" class="hero-bg relative overflow-hidden min-h-screen flex items-center noise">
+
+  <!-- Grid background pattern (BGPattern: grid + fade-edges) -->
+  <div class="absolute inset-0" style="
+    background-image: linear-gradient(to right, #252525 1px, transparent 1px), linear-gradient(to bottom, #252525 1px, transparent 1px);
+    background-size: 24px 24px;
+    -webkit-mask-image: radial-gradient(ellipse at center, transparent 10%, black 80%);
+    mask-image: radial-gradient(ellipse at center, transparent 10%, black 80%);
+    opacity: 0.5;
+    pointer-events: none;
+  "></div>
+
+  <div class="max-w-7xl mx-auto px-6 py-28 w-full relative z-10 flex flex-col items-center text-center">
+    <img src="brand_assets/nf-logo-transparent.png"
+         alt="NF" class="h-28 w-auto mb-8" />
+    <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.32em] mb-6 font-medium">Premium Online Coaching</p>
+    <h1 class="font-heading font-bold text-[clamp(2.4rem,4.5vw,4.1rem)] leading-[1.05] tracking-[-0.02em] mb-6 text-[#F0EDE8]">
+      Optimized<br>
+      Training<br>
+      <span style="color:#0077FF;">Built For You</span>
+    </h1>
+    <div class="accent-rule mb-6 mx-auto"></div>
+    <p class="text-[#F0EDE8]/50 text-[0.875rem] leading-[1.85] mb-10 max-w-md">
+      Whether your goal is fat loss, muscle building, or a complete body transformation, you're in the right place. Let's turn that dream body into reality.
+    </p>
+    <div class="flex gap-4 flex-wrap justify-center">
+      <a href="https://tally.so/r/NpLxl0"   class="btn-primary px-8 py-3.5">Apply Now</a>
+      <a href="#programs" class="btn-ghost  px-8 py-3.5">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     STATS BAR
+═══════════════════════════════════════════ -->
+<section class="bg-[#141414] border-y border-white/[0.07] py-14">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-2 gap-8 text-center divide-x divide-white/[0.07] max-w-lg mx-auto">
+      <div>
+        <p class="font-heading font-bold text-[2.75rem] text-[#F0EDE8] leading-none">5+</p>
+        <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.22em] mt-2">Years Experience</p>
+      </div>
+      <div>
+        <p class="font-heading font-bold text-[2.75rem] text-[#F0EDE8] leading-none">100%</p>
+        <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.22em] mt-2">Personalized</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MEET YOUR COACHING TEAM
+═══════════════════════════════════════════ -->
+<section id="coaches" class="py-28 bg-[#0B0B0B]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-14 items-center">
+      <!-- Coach image -->
+      <div class="ba-card overflow-hidden border border-white/[0.06]">
+        <img src="brand_assets/coach-andrew.jpg"
+             alt="Andrew" class="w-full object-cover"
+             style="filter: contrast(1.05) brightness(0.85) saturate(0.9);" />
+        <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 40%);"></div>
+      </div>
+      <!-- Coach bio -->
+      <div>
+        <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.32em] mb-4">Your Coach</p>
+        <h2 class="font-heading font-bold text-[clamp(2.5rem,4.5vw,3.75rem)] leading-tight tracking-[-0.01em]">Andrew</h2>
+        <div class="accent-rule mt-5 mb-8"></div>
+        <p class="text-[#F0EDE8]/55 text-sm leading-[1.9] mb-5">
+          With 5+ years of science based training, and 3+ years of coaching, I specialize in building programs that fit around your lifestyle.
+        </p>
+        <p class="text-[#F0EDE8]/55 text-sm leading-[1.9] mb-10">
+          My approach is built to be sustainable, and to fast track you to your goals. No cookie-cutter plans; real hands on training. If you aren't ready to take your physique to the next level, this is not the program for you.
+        </p>
+        <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.32em] mb-3">My Journey</p>
+        <p class="text-[#F0EDE8]/55 text-sm leading-[1.9]">
+          My fitness journey began at 14 years old, 115lbs, hating what I saw in the mirror. What followed was years of relentless effort, self coaching, studying, and building a physique from ground zero, with nothing but my determination and the right knowledge. That experience didn't just build my body, it built a deeper understanding of what it truly takes to transform. That experience is exactly why I do this, because I know what it feels like to start from nothing. I'm not just confident in my ability to build your physique. I've been where you are. I know the way out.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     WHAT YOU'LL RECEIVE
+═══════════════════════════════════════════ -->
+<section id="programs" class="py-28 bg-[#111111]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.32em] mb-4">What's Included</p>
+      <h2 class="font-heading font-bold text-[clamp(2.25rem,4vw,3.5rem)] leading-tight tracking-[-0.01em]">
+        What You'll Receive
+      </h2>
+      <div class="accent-rule mt-5 mx-auto"></div>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <div class="receive-card group relative bg-[#141414] border border-white/[0.07] p-8 overflow-hidden cursor-default">
+        <div class="receive-glow"></div>
+        <div class="relative z-10">
+          <div class="receive-icon mb-6">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0077FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <p class="font-heading font-semibold text-sm text-[#F0EDE8] mb-2">Personalized Training Program</p>
+          <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">A fully customized training plan built around your goals and schedule.</p>
+        </div>
+      </div>
+
+      <div class="receive-card group relative bg-[#141414] border border-white/[0.07] p-8 overflow-hidden cursor-default">
+        <div class="receive-glow"></div>
+        <div class="relative z-10">
+          <div class="receive-icon mb-6">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0077FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v4H3z"/><path d="M3 10h18v4H3z"/><path d="M3 17h18v4H3z"/></svg>
+          </div>
+          <p class="font-heading font-semibold text-sm text-[#F0EDE8] mb-2">Custom Nutrition Plan</p>
+          <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">Full macro guidance, meal timing, as well as dieting strategies.</p>
+        </div>
+      </div>
+
+      <div class="receive-card group relative bg-[#141414] border border-white/[0.07] p-8 overflow-hidden cursor-default">
+        <div class="receive-glow"></div>
+        <div class="relative z-10">
+          <div class="receive-icon mb-6">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0077FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <p class="font-heading font-semibold text-sm text-[#F0EDE8] mb-2">Weekly Check-ins & Progress Reviews</p>
+          <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">Video calls every week, as well as accountability. When you go off plan, that will not go unnoticed.</p>
+        </div>
+      </div>
+
+      <div class="receive-card group relative bg-[#141414] border border-white/[0.07] p-8 overflow-hidden cursor-default">
+        <div class="receive-glow"></div>
+        <div class="relative z-10">
+          <div class="receive-icon mb-6">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0077FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <p class="font-heading font-semibold text-sm text-[#F0EDE8] mb-2">Direct Coach Access</p>
+          <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">Message me anytime, and I will respond ASAP. No waiting, real-time feedback.</p>
+        </div>
+      </div>
+
+      <div class="receive-card group relative bg-[#141414] border border-white/[0.07] p-8 overflow-hidden cursor-default">
+        <div class="receive-glow"></div>
+        <div class="relative z-10">
+          <div class="receive-icon mb-6">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0077FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+          </div>
+          <p class="font-heading font-semibold text-sm text-[#F0EDE8] mb-2">Coaching App</p>
+          <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">Join my Everfit app, where you will track your macros, training, steps, etc. as well as a catalog of exercises with video, so you can be certain your form is on point.</p>
+        </div>
+      </div>
+
+      <div class="receive-card group relative bg-[#141414] border border-white/[0.07] p-8 overflow-hidden cursor-default">
+        <div class="receive-glow"></div>
+        <div class="relative z-10">
+          <div class="receive-icon mb-6">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0077FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <p class="font-heading font-semibold text-sm text-[#F0EDE8] mb-2">Program Adjustments</p>
+          <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">Your program evolves as you do, we will make sure you never plateau, and are always moving forward.</p>
+        </div>
+      </div>
+
+      <div class="receive-card group relative bg-[#141414] border border-white/[0.07] p-8 overflow-hidden cursor-default sm:col-span-2 lg:col-span-3 lg:max-w-sm lg:mx-auto lg:w-full">
+        <div class="receive-glow"></div>
+        <div class="relative z-10">
+          <div class="receive-icon mb-6">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0077FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="font-heading font-semibold text-sm text-[#F0EDE8] mb-2">Exclusive Resources</p>
+          <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">Obtain my in depth training/nutrition/supplement/educational guides.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CLIENT TRANSFORMATIONS
+═══════════════════════════════════════════ -->
+<section id="results" class="py-28 bg-[#0B0B0B]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="mb-16">
+      <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.32em] mb-4">Real Results</p>
+      <h2 class="font-heading font-bold text-[clamp(2.25rem,4vw,3.5rem)] leading-tight">Client Transformations</h2>
+      <div class="accent-rule mt-5"></div>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+      <div class="ba-card bg-[#141414] overflow-hidden border border-white/[0.06]">
+        <div class="grid grid-cols-2 overflow-hidden">
+          <div class="relative overflow-hidden" style="height:380px;">
+            <img src="brand_assets/client01-before.jpg" alt="Before 1" class="absolute inset-0 w-full h-full object-cover object-top" />
+            <span class="absolute top-2 left-2 bg-black/70 text-[#F0EDE8]/50 text-[9px] uppercase tracking-widest px-2 py-0.5">Before</span>
+          </div>
+          <div class="relative overflow-hidden" style="height:380px;">
+            <img src="brand_assets/client01-after.jpg" alt="After 1" class="absolute inset-0 w-full h-full object-cover object-top" />
+            <span class="absolute top-2 right-2 bg-[#0077FF] text-white text-[9px] uppercase tracking-widest px-2 py-0.5 font-semibold">After</span>
+          </div>
+        </div>
+        <div class="p-4 border-t border-white/[0.07] grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-[#F0EDE8]/40 text-[9px] uppercase tracking-widest mb-1">Before</p>
+            <p class="font-heading font-bold text-sm text-[#F0EDE8]">141 lbs</p>
+          </div>
+          <div>
+            <p class="text-[#F0EDE8]/40 text-[9px] uppercase tracking-widest mb-1">After</p>
+            <p class="font-heading font-bold text-sm text-[#0077FF]">150 lbs</p>
+          </div>
+          <div class="col-span-2">
+            <p class="text-[#F0EDE8]/40 text-[10px] tracking-wide">7 Month Transformation</p>
+          </div>
+        </div>
+      </div>
+      <div class="ba-card bg-[#141414] overflow-hidden border border-white/[0.06]">
+        <div class="grid grid-cols-2 overflow-hidden">
+          <div class="relative overflow-hidden" style="height:380px;">
+            <img src="brand_assets/client02-before.jpg" alt="Before 2" class="absolute inset-0 w-full h-full object-cover object-top" />
+            <span class="absolute top-2 left-2 bg-black/70 text-[#F0EDE8]/50 text-[9px] uppercase tracking-widest px-2 py-0.5">Before</span>
+          </div>
+          <div class="relative overflow-hidden" style="height:380px;">
+            <img src="brand_assets/client02-after.jpg" alt="After 2" class="absolute inset-0 w-full h-full object-cover object-top" />
+            <span class="absolute top-2 right-2 bg-[#0077FF] text-white text-[9px] uppercase tracking-widest px-2 py-0.5 font-semibold">After</span>
+          </div>
+        </div>
+        <div class="p-4 border-t border-white/[0.07] grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-[#F0EDE8]/40 text-[9px] uppercase tracking-widest mb-1">Before</p>
+            <p class="font-heading font-bold text-sm text-[#F0EDE8]">142 lbs</p>
+          </div>
+          <div>
+            <p class="text-[#F0EDE8]/40 text-[9px] uppercase tracking-widest mb-1">After</p>
+            <p class="font-heading font-bold text-sm text-[#0077FF]">158 lbs</p>
+          </div>
+          <div class="col-span-2">
+            <p class="text-[#F0EDE8]/40 text-[10px] tracking-wide">1 Year Transformation</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     OLD HABITS vs NEW HABITS
+═══════════════════════════════════════════ -->
+<section class="py-28 bg-[#141414]">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-0 border border-white/[0.07] overflow-hidden">
+
+      <!-- Old Habits -->
+      <div class="p-10 md:p-14 border-b md:border-b-0 md:border-r border-white/[0.07]">
+        <p class="text-[#F0EDE8]/30 text-[10px] uppercase tracking-[0.32em] mb-4">Before</p>
+        <h2 class="font-heading font-bold text-[2rem] leading-tight tracking-[-0.01em] text-[#F0EDE8] mb-8">Old Habits</h2>
+        <div class="space-y-7">
+          <div class="check-item">
+            <span class="flex-shrink-0 w-[18px] h-[18px] mt-0.5 flex items-center justify-center border border-red-500/40 text-red-400 text-[9px] font-bold">✕</span>
+            <div>
+              <p class="text-[#F0EDE8] font-medium text-sm">Yo-yo Progress</p>
+              <p class="text-[#F0EDE8]/40 text-xs mt-1 leading-relaxed">Staying on track for a week then falling off track, and repeating that cycle over and over.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <span class="flex-shrink-0 w-[18px] h-[18px] mt-0.5 flex items-center justify-center border border-red-500/40 text-red-400 text-[9px] font-bold">✕</span>
+            <div>
+              <p class="text-[#F0EDE8] font-medium text-sm">Stuck in a Plateau</p>
+              <p class="text-[#F0EDE8]/40 text-xs mt-1 leading-relaxed">The scale never moves no matter how hard you try, and you're left feeling stuck.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <span class="flex-shrink-0 w-[18px] h-[18px] mt-0.5 flex items-center justify-center border border-red-500/40 text-red-400 text-[9px] font-bold">✕</span>
+            <div>
+              <p class="text-[#F0EDE8] font-medium text-sm">Guesswork</p>
+              <p class="text-[#F0EDE8]/40 text-xs mt-1 leading-relaxed">Always feeling like you're guessing, and never confident with your program.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Habits -->
+      <div class="p-10 md:p-14 bg-[#0F0F0F]">
+        <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.32em] mb-4">After</p>
+        <h2 class="font-heading font-bold text-[2rem] leading-tight tracking-[-0.01em] text-[#F0EDE8] mb-8">New Habits</h2>
+        <div class="space-y-7">
+          <div class="check-item">
+            <span class="check-icon">✓</span>
+            <div>
+              <p class="text-[#F0EDE8] font-medium text-sm">Staying on Track</p>
+              <p class="text-[#F0EDE8]/40 text-xs mt-1 leading-relaxed">Being consistent throughout, never falling off schedule.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <span class="check-icon">✓</span>
+            <div>
+              <p class="text-[#F0EDE8] font-medium text-sm">Consistent Progress</p>
+              <p class="text-[#F0EDE8]/40 text-xs mt-1 leading-relaxed">See the results you're looking for, week over week, month over month, year over year.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <span class="check-icon">✓</span>
+            <div>
+              <p class="text-[#F0EDE8] font-medium text-sm">Confidence in your Plan</p>
+              <p class="text-[#F0EDE8]/40 text-xs mt-1 leading-relaxed">Being in full confidence with your regimen, whether it be diet, training, recovery.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     THREE STEPS
+═══════════════════════════════════════════ -->
+<section class="py-28 bg-[#0B0B0B]">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="mb-14">
+      <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.32em] mb-4">The Process</p>
+      <h2 class="font-heading font-bold text-[clamp(2.25rem,4vw,3.5rem)] leading-tight tracking-[-0.01em]">Three Steps to your Transformation</h2>
+      <div class="accent-rule mt-5"></div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-0 border border-white/[0.07] overflow-hidden">
+
+      <!-- Step 1 -->
+      <div class="p-10 border-b md:border-b-0 md:border-r border-white/[0.07]">
+        <p class="font-heading font-bold text-[3rem] leading-none text-[#0077FF]/20 mb-6">01</p>
+        <p class="text-[#F0EDE8] font-semibold text-sm mb-3">Apply and Consultation</p>
+        <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">Fill out an application going over basic questions, and schedule a free consultation. We'll discuss your struggles, goals, lifestyle, and what the coaching process looks like.</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="p-10 border-b md:border-b-0 md:border-r border-white/[0.07] bg-[#0F0F0F]">
+        <p class="font-heading font-bold text-[3rem] leading-none text-[#0077FF]/20 mb-6">02</p>
+        <p class="text-[#F0EDE8] font-semibold text-sm mb-3">Onboarding</p>
+        <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">We will get you onboarded with the program, making sure you get into our app smoothly; in which you will receive your fully customized training/nutrition plan.</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="p-10">
+        <p class="font-heading font-bold text-[3rem] leading-none text-[#0077FF]/20 mb-6">03</p>
+        <p class="text-[#F0EDE8] font-semibold text-sm mb-3">Progression</p>
+        <p class="text-[#F0EDE8]/40 text-xs leading-relaxed">Follow your plan, with constant accountability, support, and tweaks as needed to keep you moving forward.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FAQ
+═══════════════════════════════════════════ -->
+<section id="faq" class="py-28 bg-[#111111]">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="mb-16">
+      <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.32em] mb-4">Got Questions?</p>
+      <h2 class="font-heading font-bold text-[clamp(2.25rem,4vw,3.5rem)] leading-tight">Frequently Asked Questions</h2>
+      <div class="accent-rule mt-5"></div>
+    </div>
+    <div class="space-y-px">
+      <div class="acc-item bg-[#141414] border border-white/[0.06]">
+        <button class="w-full flex items-center justify-between px-7 py-5 text-left gap-4" style="color:#F0EDE8;"
+                onclick="this.closest('.acc-item').classList.toggle('open')">
+          <span class="font-heading font-bold text-base tracking-wide" style="color:#F0EDE8;">Can I get in shape if I am busy?</span>
+          <span class="acc-arrow text-[#0077FF] text-lg flex-shrink-0">↓</span>
+        </button>
+        <div class="acc-content">
+          <div class="px-7 pb-6">
+            <p class="text-[#F0EDE8]/45 text-sm leading-relaxed">Yes, you can and you will get amazing results as long as you are willing to invest a little bit of time into yourself. The program will be tailored to the time you have available, not just what looks good on paper.</p>
+          </div>
+        </div>
+      </div>
+      <div class="acc-item bg-[#141414] border border-white/[0.06]">
+        <button class="w-full flex items-center justify-between px-7 py-5 text-left gap-4" style="color:#F0EDE8;"
+                onclick="this.closest('.acc-item').classList.toggle('open')">
+          <span class="font-heading font-bold text-base tracking-wide" style="color:#F0EDE8;">Do I need to follow a strict diet?</span>
+          <span class="acc-arrow text-[#0077FF] text-lg flex-shrink-0">↓</span>
+        </button>
+        <div class="acc-content">
+          <div class="px-7 pb-6">
+            <p class="text-[#F0EDE8]/45 text-sm leading-relaxed">Dieting does not have to come at the cost of enjoyment. Your nutrition plan will include the foods that you love.</p>
+          </div>
+        </div>
+      </div>
+      <div class="acc-item bg-[#141414] border border-white/[0.06]">
+        <button class="w-full flex items-center justify-between px-7 py-5 text-left gap-4" style="color:#F0EDE8;"
+                onclick="this.closest('.acc-item').classList.toggle('open')">
+          <span class="font-heading font-bold text-base tracking-wide" style="color:#F0EDE8;">What if I'm a complete beginner?</span>
+          <span class="acc-arrow text-[#0077FF] text-lg flex-shrink-0">↓</span>
+        </button>
+        <div class="acc-content">
+          <div class="px-7 pb-6">
+            <p class="text-[#F0EDE8]/45 text-sm leading-relaxed">We work with all levels, ranging from complete beginners to elite lifters. We will assess your current fitness level, and design a program that challenges you with your experience in mind.</p>
+          </div>
+        </div>
+      </div>
+      <div class="acc-item bg-[#141414] border border-white/[0.06]">
+        <button class="w-full flex items-center justify-between px-7 py-5 text-left gap-4" style="color:#F0EDE8;"
+                onclick="this.closest('.acc-item').classList.toggle('open')">
+          <span class="font-heading font-bold text-base tracking-wide" style="color:#F0EDE8;">How long is the program commitment?</span>
+          <span class="acc-arrow text-[#0077FF] text-lg flex-shrink-0">↓</span>
+        </button>
+        <div class="acc-content">
+          <div class="px-7 pb-6">
+            <p class="text-[#F0EDE8]/45 text-sm leading-relaxed">Programs will start with a 12-week block schedule. We recommend at least two blocks (24 weeks) for transformational results, but after the first 12 weeks, you're free to reassess where you're at.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     CALL TO ACTION
+═══════════════════════════════════════════ -->
+<section class="py-28 bg-[#111111]">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    <p class="text-[#0077FF] text-[10px] uppercase tracking-[0.32em] mb-6">Take the First Step</p>
+    <h2 class="font-heading font-bold text-[clamp(2.25rem,4vw,3.5rem)] leading-tight tracking-[-0.01em] text-[#F0EDE8] mb-10">
+      Same time next year, will you have a different body, or the same excuses?
+    </h2>
+    <a href="https://tally.so/r/NpLxl0" class="btn-primary px-12 py-4">Apply Now</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer class="bg-[#0A0A0A] border-t border-white/[0.06] pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-10 mb-14">
+      <!-- Brand -->
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="font-heading font-bold text-lg tracking-[0.1em]">NDREW<span style="color:#0077FF;">FITNESS</span></span>
+        </div>
+        <p class="text-[#F0EDE8]/35 text-sm leading-[1.85] max-w-xs">
+          Premium online coaching programs for people who are serious about transforming their body and lifestyle — for good.
+        </p>
+        <div class="flex gap-3 mt-6">
+          <a href="https://www.instagram.com/ndrewnat/?hl=en" target="_blank" class="social-btn">ig</a>
+        </div>
+      </div>
+      <!-- Company -->
+      <div>
+        <h4 class="text-[10px] font-semibold uppercase tracking-[0.2em] mb-5 text-[#F0EDE8]/50">Company</h4>
+        <ul class="space-y-3">
+          <li><a href="#"       class="text-[#F0EDE8]/35 text-sm hover:text-[#0077FF] transition-colors duration-200">About Us</a></li>
+          <li><a href="#results" class="text-[#F0EDE8]/35 text-sm hover:text-[#0077FF] transition-colors duration-200">Client Results</a></li>
+          <li><a href="#faq"    class="text-[#F0EDE8]/35 text-sm hover:text-[#0077FF] transition-colors duration-200">FAQ</a></li>
+          <li><a href="#"       class="text-[#F0EDE8]/35 text-sm hover:text-[#0077FF] transition-colors duration-200">Contact</a></li>
+          <li><a href="/privacy-policy.html" class="text-[#F0EDE8]/35 text-sm hover:text-[#0077FF] transition-colors duration-200">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/[0.06] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-[#F0EDE8]/20 text-xs">© 2026 NdrewFitness. All rights reserved.</p>
+      <p class="text-[#F0EDE8]/20 text-xs">Results vary. Individual outcomes depend on commitment and consistency.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
